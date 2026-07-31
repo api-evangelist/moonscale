@@ -1,8 +1,24 @@
 aid: moonscale
+accessModel:
+  pricing: unknown
+  onboarding: unknown
+  trial: false
+  try_now: false
+  public: false
+  label: Unknown
+  confidence: low
+  source: []
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/moonscale.png
 name: Moonscale
-description: 'Moonscale is a company surfaced as a portfolio company of eqt-ventures and added to the
-  API Evangelist network as a stub for enrichment. Sector: artificial-intelligence. This profile is a
-  lead awaiting the enrichment pipeline.'
+description: 'Moonscale is an AI sales advisor platform that automates top-of-funnel sales conversations
+  and lead qualification with AI-powered sales avatars. Its avatars pitch products, qualify inbound
+  buyers, handle objections, book meetings, and follow up around the clock across websites, landing
+  pages, emails, and apps, with support for 130+ languages and CRM connections to Salesforce, HubSpot,
+  Pipedrive, Slack, and Clay. Moonscale markets a no-code, "no dev work required" deployment and, as of
+  this enrichment pass, publishes no public API, SDK, developer portal, or OpenAPI surface. Backed by
+  EQT Ventures. Added to the API Evangelist network as a portfolio company profile.'
 url: https://raw.githubusercontent.com/api-evangelist/moonscale/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
@@ -12,10 +28,16 @@ x-tier: stub
 x-tier-reason: portfolio-lead
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-20'
 tags:
 - Company
 - Artificial Intelligence
+- Sales
+- Sales Automation
+- Lead Generation
+- AI Agents
+- Conversational AI
+- CRM
 apis: []
 maintainers:
 - FN: Kin Lane
@@ -23,5 +45,20 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: DomainSecurity
+  url: security/moonscale-domain-security.yml
 - type: Website
   url: https://www.moonscale.com/
+- type: Blog
+  url: https://www.moonscale.com/blog
+- type: Support
+  url: https://www.moonscale.com/contact
+- type: PrivacyPolicy
+  url: https://www.moonscale.com/legal/privacy
+- type: TermsOfService
+  url: https://www.moonscale.com/legal/terms-and-conditions
+x-enrichment:
+  date: '2026-07-20'
+  status: minimal
+  artifacts_added: 1
+  pass: local-v1
