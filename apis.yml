@@ -1,34 +1,48 @@
 aid: moonscale
 accessModel:
-  pricing: unknown
-  onboarding: unknown
+  pricing: contact-sales
+  onboarding: request-access
   trial: false
   try_now: false
   public: false
-  label: Unknown
-  confidence: low
-  source: []
-  generated: '2026-07-22'
-  method: derived
+  label: Contact sales
+  confidence: high
+  source:
+  - https://www.moonscale.com/
+  - https://vidlab7-d7584a5d.mintlify.app/api-reference/endpoint/createApiKey
+  generated: '2026-08-14'
+  method: searched
+  note: >-
+    No pricing page exists (moonscale.com/pricing returns 404 and the sitemap has no
+    pricing URL). Every call to action is "Request access" or "See live demo". API access
+    is separately feature-flagged per account and granted on request via
+    support@moonscale.com, so neither the product nor the API is self-service.
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/moonscale.png
 name: Moonscale
-description: 'Moonscale is an AI sales advisor platform that automates top-of-funnel sales conversations
-  and lead qualification with AI-powered sales avatars. Its avatars pitch products, qualify inbound
-  buyers, handle objections, book meetings, and follow up around the clock across websites, landing
-  pages, emails, and apps, with support for 130+ languages and CRM connections to Salesforce, HubSpot,
-  Pipedrive, Slack, and Clay. Moonscale markets a no-code, "no dev work required" deployment and, as of
-  this enrichment pass, publishes no public API, SDK, developer portal, or OpenAPI surface. Backed by
-  EQT Ventures. Added to the API Evangelist network as a portfolio company profile.'
+description: 'Moonscale (formerly VidLab7) is a Munich-based AI sales advisor platform whose
+  "Digital Sales Human" avatars automate top-of-funnel sales conversations — pitching products,
+  qualifying inbound buyers, running interactive demos, handling objections, booking meetings and
+  following up around the clock across websites, landing pages, emails and apps, with support for
+  130+ languages and CRM connections to Salesforce, HubSpot, Pipedrive, Slack and Clay. Moonscale
+  does publish a real, machine-readable API: an OpenAPI 3.0.1 document titled "Moonscale API" served
+  from its Mintlify documentation site, covering four operations across two surfaces — live-avatar
+  meeting rooms with conversation transcripts and summaries (/api/v1/), and asynchronous
+  studio-avatar video generation with a caller-registered completion webhook (/api/studio-avatar/).
+  Requests authenticate with an x-api-key header against https://api-prd.moonscale.com; keys are
+  issued from Moonscale Studio, but API access is feature-flagged per account and must be requested
+  from support. There is no first-party SDK, MCP server, agent card, status page, changelog,
+  published rate limit or published price. Backed by EQT Ventures.'
 url: https://raw.githubusercontent.com/api-evangelist/moonscale/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
 x-backed-by:
 - eqt-ventures
-x-tier: stub
-x-tier-reason: portfolio-lead
+x-former-name: VidLab7
+x-tier: profile
+x-tier-reason: published-openapi
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-20'
+modified: '2026-08-14'
 tags:
 - Company
 - Artificial Intelligence
@@ -38,13 +52,71 @@ tags:
 - AI Agents
 - Conversational AI
 - CRM
-apis: []
+- Video Generation
+- Avatars
+- Speech
+- Germany
+apis:
+- name: Moonscale API
+  description: >-
+    The Moonscale API covers two surfaces. The live-avatar surface creates single-participant
+    meeting rooms hosted by a real-time AI sales avatar and returns the conversation transcript
+    plus an AI-generated summary afterwards, keyed either by a single conversation handle or by a
+    time window of at most 24 hours. The studio-avatar surface renders videos asynchronously from
+    a script, a voice and an avatar, returning a caller-supplied correlation id that is then used
+    to poll for the result or to match an optional completion webhook. All requests authenticate
+    with an x-api-key header.
+  humanURL: https://vidlab7-d7584a5d.mintlify.app/api-reference/introduction
+  baseURL: https://api-prd.moonscale.com
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/moonscale.png
+  tags:
+  - Artificial Intelligence
+  - Sales
+  - Conversational AI
+  - Video Generation
+  - Avatars
+  - Webhooks
+  properties:
+  - type: OpenAPI
+    url: openapi/moonscale-openapi-original.json
+  - type: Overlay
+    url: overlays/moonscale-api-overlay.yaml
+  - type: Documentation
+    url: https://vidlab7-d7584a5d.mintlify.app/api-reference/introduction
+  - type: APIReference
+    url: https://vidlab7-d7584a5d.mintlify.app/api-reference/endpoint/liveAvatarsCreateRoom
+  - type: GettingStarted
+    url: https://vidlab7-d7584a5d.mintlify.app/api-reference/endpoint/createApiKey
+  - type: Authentication
+    url: authentication/moonscale-authentication.yml
+  - type: ErrorCatalog
+    url: errors/moonscale-problem-types.yml
+  - type: DataModel
+    url: data-model/moonscale-data-model.yml
+  - type: Examples
+    url: examples/moonscale-examples.yml
+  - type: Conventions
+    url: conventions/moonscale-conventions.yml
+  - type: Webhooks
+    url: asyncapi/moonscale-webhooks.yml
+  - type: RateLimits
+    url: rate-limits/moonscale-rate-limits.yml
+  x-base-url-note: >-
+    The published OpenAPI's servers[] block is http://sandbox.mintlify.com — the Mintlify
+    documentation-template default, on a host Moonscale does not own. The real base URL is
+    https://api-prd.moonscale.com, named throughout Moonscale's own reference and verified
+    live on 2026-08-14 (HTTP 401 with a Moonscale error envelope on /health). The pre-rename
+    host https://api-prd.vidlab7.com is also still live and is the host the third-party
+    Activepieces connector still targets. The harvested spec is left verbatim; the correction
+    is carried in overlays/moonscale-api-overlay.yaml.
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: AgenticAccess
+  url: agentic-access/moonscale-agentic-access.yml
 - type: DomainSecurity
   url: security/moonscale-domain-security.yml
 - type: Website
@@ -57,8 +129,114 @@ common:
   url: https://www.moonscale.com/legal/privacy
 - type: TermsOfService
   url: https://www.moonscale.com/legal/terms-and-conditions
+- type: Imprint
+  url: https://www.moonscale.com/legal/imprint
+- type: Documentation
+  url: https://vidlab7-d7584a5d.mintlify.app/api-reference/introduction
+- type: APIReference
+  url: https://vidlab7-d7584a5d.mintlify.app/api-reference/endpoint/liveAvatarsCreateRoom
+- type: GettingStarted
+  url: https://vidlab7-d7584a5d.mintlify.app/api-reference/endpoint/createApiKey
+- type: Login
+  url: https://app.moonscale.com
+- type: LLMsTxt
+  url: llms/moonscale-llms.txt
+- type: Authentication
+  url: authentication/moonscale-authentication.yml
+- type: Conventions
+  url: conventions/moonscale-conventions.yml
+- type: ErrorCatalog
+  url: errors/moonscale-problem-types.yml
+- type: DataModel
+  url: data-model/moonscale-data-model.yml
+- type: Examples
+  url: examples/moonscale-examples.yml
+- type: Webhooks
+  url: asyncapi/moonscale-webhooks.yml
+- type: Lifecycle
+  url: lifecycle/moonscale-lifecycle.yml
+- type: Conformance
+  url: conformance/moonscale-conformance.yml
+- type: Packages
+  url: packages/moonscale-packages.yml
+- type: Plans
+  url: plans/moonscale-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/moonscale-rate-limits.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: Overlay
+  url: overlays/moonscale-api-overlay.yaml
+x-pointers-deliberately-omitted:
+  note: >-
+    Recorded so a later pass does not "fix" these by adding pointers the provider has not
+    earned. Each artifact below exists and documents a verified ABSENCE.
+  omitted:
+  - {type: WellKnown, why: 'every /.well-known/ path 404s (or 403s at the gateway) on every host — see well-known/moonscale-well-known.yml'}
+  - {type: SecurityTxt, why: 'no security.txt is served on any host'}
+  - {type: AgentCard, why: '/.well-known/agent-card.json and /.well-known/agent.json miss on every host; an agent card is search-only and must never be authored on a provider''s behalf'}
+  - {type: MCPServer, why: 'no MCP server exists, hosted or stdio; mcp/moonscale-mcp.yml carries deployment mode "none" and a derived candidate tool list only'}
+  - {type: SDKs, why: 'zero first-party client libraries in any registry; the only published package is a third-party Activepieces connector'}
+  - {type: Idempotency, why: 'no idempotency key header or parameter is documented or present in the spec; correlationId is a retrieval handle, not a de-duplication key'}
+  - {type: StatusPage, why: 'no status page exists; status.moonscale.com does not resolve'}
+  - {type: Deprecation, why: 'no deprecation or sunset policy is published and no RFC 8594 header was observed'}
+  - {type: ChangeLog, why: 'no dated changelog or release-notes page is published'}
+  - {type: Security, why: 'no vulnerability disclosure policy, security.txt, or bug bounty was found'}
+  - {type: Compliance, why: 'no certification or compliance program is published'}
+  - {type: TrustCenter, why: 'no trust center was found on any host'}
+  - {type: Pricing, why: 'moonscale.com/pricing returns 404 and the sitemap contains no pricing URL'}
+  - {type: AsyncAPI, why: 'no AsyncAPI document is published; the webhook surface is captured under Webhooks instead'}
+  - {type: GitHubOrganization, why: 'github.com/vidlab7 has zero public repositories and github.com/moonscale is an unrelated Paris account'}
+  - {type: Sandbox, why: 'no sandbox or test mode is published; the spec''s sandbox.mintlify.com server is a documentation-template default, not a Moonscale test environment'}
+  - {type: CLI, why: 'no first-party CLI exists'}
+  - {type: OAuthScopes, why: 'the API is api-key only; there is no OAuth surface to scope'}
+x-contract-discovery:
+  note: >-
+    A prior enrichment pass (2026-07-20) recorded that Moonscale "publishes no public API,
+    SDK, developer portal, or OpenAPI surface". That was wrong, and the reason it was wrong
+    is worth recording. Nothing on moonscale.com links to the API: the marketing site is a
+    Webflow build whose complete sitemap has no developer, docs, API or pricing URL, and
+    every /openapi.json, /docs, /api and /developers path 404s. The contract was found by
+    following the company's own blog posts to its pre-rename identity (VidLab7), then to the
+    npm registry, where the third-party Activepieces connector @activepieces/piece-vidlab7
+    hard-codes the real API host and the x-api-key scheme. Searching from that host surfaced
+    the Mintlify documentation site, which serves a genuine OpenAPI 3.0.1 titled
+    "Moonscale API" at /api-reference/openapi.json along with a real llms.txt.
+  ownership_check:
+    verdict: confirmed
+    reasoning: >-
+      The spec is served from a mintlify.app subdomain rather than a moonscale.com host, so
+      it was checked against what it says about itself rather than where it was fetched. Its
+      info.title is "Moonscale API" and its description names Moonscale. Its four paths
+      (/api/v1/conversations/{conversationShortCode}, /api/v1/rooms,
+      /api/studio-avatar/generate-video, /api/studio-avatar/generated-video/{correlationId})
+      and its x-api-key security scheme match, exactly, the live endpoints the independent
+      third-party Activepieces connector calls against api-prd.vidlab7.com — and both
+      api-prd.moonscale.com and api-prd.vidlab7.com resolve, are live, and answer with the
+      same Moonscale error envelope. The vidlab7 domain is the company's own pre-rename
+      identity, corroborated by Crunchbase filing Moonscale under /organization/vidlab7 and
+      by Moonscale's own blog posts about VidLab7. The spec's servers[] block
+      (http://sandbox.mintlify.com) is the only element that does NOT point at the provider,
+      and that is a Mintlify template default rather than a sibling product's host.
+  probes:
+  - {url: 'https://www.moonscale.com/openapi.json', status: 404}
+  - {url: 'https://www.moonscale.com/docs', status: 404}
+  - {url: 'https://www.moonscale.com/developers', status: 404}
+  - {url: 'https://www.moonscale.com/llms.txt', status: 404}
+  - {url: 'https://app.moonscale.com/openapi.json', status: 404}
+  - {url: 'https://api-prd.moonscale.com/openapi.json', status: 403}
+  - {url: 'https://api-prd.moonscale.com/health', status: 401}
+  - {url: 'https://vidlab7-d7584a5d.mintlify.app/api-reference/openapi.json', status: 200}
+  - {url: 'https://vidlab7-d7584a5d.mintlify.app/llms.txt', status: 200}
+  robots:
+    honored: true
+    note: >-
+      api-prd.moonscale.com, app.moonscale.com and studio.vidlab7.com all serve
+      "User-agent: * / Disallow: /" and additionally name GPTBot, ChatGPT-User and CCBot.
+      Probing of those hosts stopped at the initial discovery sweep. The documentation host
+      allows crawling and carries "Content-Signal: ai-train=yes, search=yes, ai-input=yes".
 x-enrichment:
-  date: '2026-07-20'
-  status: minimal
-  artifacts_added: 1
+  date: '2026-08-14'
+  status: enriched
+  artifacts_added: 16
   pass: local-v1
