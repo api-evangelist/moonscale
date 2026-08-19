@@ -1,0 +1,51 @@
+generated: '2026-08-14'
+method: searched
+source: openapi/moonscale-openapi-original.json
+docs: https://vidlab7-d7584a5d.mintlify.app/api-reference/endpoint/createApiKey
+summary:
+  types: [apiKey]
+  api_key_in: [header]
+  oauth2_flows: []
+  note: >-
+    Single-scheme API. Every operation in the published OpenAPI is protected by one
+    apiKey scheme carried in the x-api-key request header. There is no OAuth 2.0,
+    OpenID Connect, HTTP basic/bearer or mTLS surface, so scopes/ is intentionally
+    not emitted for this provider.
+schemes:
+- name: ApiKeyAuth
+  type: apiKey
+  in: header
+  parameter: x-api-key
+  applied: global
+  sources: [openapi/moonscale-openapi-original.json]
+  note: >-
+    Declared in the root security[] block AND repeated as an operation-level security[]
+    on both /api/studio-avatar/* operations. Verified live: an unauthenticated GET to
+    https://api-prd.moonscale.com/health returns HTTP 401
+    {"message":"Unauthorized request. No API key provided."}
+key_issuance:
+  self_service: false
+  where: https://app.moonscale.com  (Moonscale Studio -> API, bottom of the left sidebar)
+  steps:
+  - Sign in to Moonscale Studio at app.moonscale.com
+  - Open the API section at the bottom-left of the sidebar
+  - Click "Generate new key", name the key, click "Generate"
+  - Copy the key immediately — it is shown once and permanently hidden afterwards
+  rotation: >-
+    No rotate operation is published. The documented recovery for a lost key is to delete
+    it and generate a new one.
+  gate: >-
+    Moonscale's own documentation states API access is feature-flagged and may not be
+    enabled for an account; accounts without the API section are told to email
+    support@moonscale.com to request access. Key issuance is therefore account-gated and
+    not self-service, even though the reference and the OpenAPI are public.
+  contact: support@moonscale.com
+transport:
+  https_only: true
+  observed_headers:
+  - {header: x-request-id, note: returned on every response; correlation id for support}
+  - {header: server, value: Google Frontend}
+evidence:
+- {url: 'https://api-prd.moonscale.com/health', status: 401, body: '{"message":"Unauthorized request. No API key provided."}'}
+- {url: 'https://api-prd.moonscale.com/api/v1/avatars', status: 403, body: '{"message":"Forbidden"}'}
+- {url: 'https://vidlab7-d7584a5d.mintlify.app/api-reference/openapi.json', status: 200}

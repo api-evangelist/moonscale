@@ -1,0 +1,94 @@
+generated: '2026-08-14'
+method: derived
+source: openapi/moonscale-openapi-original.json
+docs: https://vidlab7-d7584a5d.mintlify.app/api-reference/endpoint/liveAvatarsGetConversationsByDate
+format: proprietary
+rfc9457: false
+envelope:
+  content_type: application/json
+  shape: '{"message": "<human-readable string>"}'
+  fields:
+  - {name: message, type: string, description: Human-readable error text. The only field returned.}
+  note: >-
+    No type URI, title, status, detail, instance, or machine-readable error code is
+    returned, so there is no stable identifier for an agent to branch on. Two different
+    failures at the same HTTP status are distinguishable only by matching prose.
+problems:
+- status: 400
+  title: Invalid request parameters
+  source_operation: openapi/moonscale-openapi-original.json#/paths/~1api~1studio-avatar~1generate-video/post
+  method: derived
+  remediation: >-
+    Supply all four required VideoGenerationRequest fields — avatarId, script, voiceId and
+    correlationId. avatarId comes from the avatar's page in Moonscale Studio.
+- status: 400
+  title: Invalid query parameters
+  source_operation: 'GET /api/v1/conversations'
+  method: searched
+  source: https://vidlab7-d7584a5d.mintlify.app/api-reference/endpoint/liveAvatarsGetConversationsByDate
+  causes:
+  - dateStart or dateEnd missing
+  - the requested range exceeds 24 hours
+  - dateEnd is not after dateStart
+  remediation: Request a window of 24 hours or less with dateEnd strictly after dateStart, both as Unix timestamps in seconds.
+  note: Documented in the reference only; this operation is absent from the published OpenAPI.
+- status: 401
+  title: Unauthorized - invalid or missing API key
+  source_operation: 'GET /api/v1/conversations'
+  method: probed
+  observed:
+    url: https://api-prd.moonscale.com/health
+    body: '{"message":"Unauthorized request. No API key provided."}'
+  remediation: >-
+    Send the key in the x-api-key request header. Generate one in Moonscale Studio under
+    API; if the API section is absent the account is not feature-flagged for API access and
+    must email support@moonscale.com.
+- status: 403
+  title: Forbidden
+  source_operation: gateway
+  method: probed
+  observed:
+    url: https://api-prd.moonscale.com/api/v1/avatars
+    body: '{"message":"Forbidden"}'
+  note: >-
+    Returned by the edge for unauthenticated requests to every routed path other than
+    /health and /robots.txt. Not documented in the OpenAPI or the reference, and it is
+    indistinguishable from a genuine authorization denial on a valid key — a caller cannot
+    tell "no key" from "key lacks access to this resource" from this response.
+  remediation: Send a valid x-api-key header; if the key is valid, contact support@moonscale.com.
+- status: 404
+  title: Invalid get conversation transcription and summary request
+  source_operation: openapi/moonscale-openapi-original.json#/paths/~1api~1v1~1conversations~1{conversationShortCode}/get
+  method: derived
+  remediation: Verify the conversation short code returned by the create-room operation.
+- status: 404
+  title: Invalid meeting room setup
+  source_operation: openapi/moonscale-openapi-original.json#/paths/~1api~1v1~1rooms/post
+  method: derived
+  note: >-
+    The spec returns 404 rather than 400 or 422 for a malformed create-room request, which
+    is an unusual status for a request-validation failure on a POST to an existing path.
+  remediation: Verify liveAvatarShortCode names an avatar in the workspace and that name is present.
+- status: 404
+  title: Video not found
+  source_operation: openapi/moonscale-openapi-original.json#/paths/~1api~1studio-avatar~1generated-video~1{correlationId}/get
+  method: derived
+  remediation: >-
+    Verify the correlationId matches the value supplied on the original
+    POST /api/studio-avatar/generate-video request.
+coverage:
+  operations_in_spec: 4
+  operations_with_4xx: 4
+  operations_with_5xx: 0
+  note: >-
+    No operation in the published OpenAPI declares a 5xx response, and no server-error
+    contract is published anywhere. A caller has no documented behaviour to code against
+    for an upstream failure.
+failure_states:
+- state: FAILED
+  surface: video generation
+  where: GetGeneratedVideoByCorrelationIdResponse.status
+  note: >-
+    An asynchronous generation failure is NOT an HTTP error. The poll or webhook returns
+    200 with status FAILED and no published reason field, so the cause of a failed
+    generation is not retrievable through the API.

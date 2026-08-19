@@ -1,0 +1,14 @@
+# Moonscale
+
+## Docs
+
+- [Introduction](https://vidlab7-d7584a5d.mintlify.app/api-reference/introduction.md): Moonscale provides a powerful API for managing real-time live avatars. There are also powerful guides on how to use our cutting edge features from our API and our Studio to boost your revenue generation!
+- [Create API Key](https://vidlab7-d7584a5d.mintlify.app/api-reference/endpoint/createApiKey.md): Generate an API key to authenticate with Moonscale's Studio API endpoints.
+- [Configure your AI Avatar](https://vidlab7-d7584a5d.mintlify.app/api-reference/endpoint/configureRealTimeAvatar.md): Set up your avatar's behavior, capabilities, and meeting options through the Studio dashboard.
+- [Create meeting room](https://vidlab7-d7584a5d.mintlify.app/api-reference/endpoint/liveAvatarsCreateRoom.md): Establishes a live meeting room featuring an AI assistant, accessible to a single participant. Upon joining, the user may engage in a timed conversation with the assistant.
+- [Get meeting transcript](https://vidlab7-d7584a5d.mintlify.app/api-reference/endpoint/liveAvatarsGetTranscript.md): Retrieves transcript and summary from a conversation that occurred in a live meeting room.
+- [Get conversations by date range](https://vidlab7-d7584a5d.mintlify.app/api-reference/endpoint/liveAvatarsGetConversationsByDate.md): Retrieves conversations for all avatars owned by the authenticated user within a given time range. The range must not exceed 24 hours.
+
+## OpenAPI Specs
+
+- [openapi](https://vidlab7-d7584a5d.mintlify.app/api-reference/openapi.json)

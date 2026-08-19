@@ -1,0 +1,109 @@
+generated: '2026-08-14'
+method: searched
+source: >-
+  https://vidlab7-d7584a5d.mintlify.app/api-reference/introduction plus
+  openapi/moonscale-openapi-original.json and live unauthenticated probes of
+  https://api-prd.moonscale.com
+authentication:
+  style: api-key-header
+  header: x-api-key
+  see: authentication/moonscale-authentication.yml
+base_url:
+  production: https://api-prd.moonscale.com
+  legacy_alias: https://api-prd.vidlab7.com
+  note: >-
+    Both hosts are live and answer with the same JSON gateway envelope. api-prd.vidlab7.com
+    is the pre-rename host (Moonscale was VidLab7 until the 2026 rebrand) and is still the
+    host hard-coded in the third-party Activepieces connector; the current documentation
+    uses api-prd.moonscale.com throughout. The published OpenAPI's servers[] block names
+    neither — it carries the Mintlify template default http://sandbox.mintlify.com, so the
+    spec alone cannot tell a client where to send a request.
+versioning:
+  scheme: uri-path
+  current: v1
+  note: >-
+    The live-avatar surface is versioned at /api/v1/. The video-generation surface is NOT
+    versioned — it sits at /api/studio-avatar/ with no version segment, so the two halves
+    of the same API follow different versioning conventions.
+  see: lifecycle/moonscale-lifecycle.yml
+idempotency:
+  supported: false
+  note: >-
+    No idempotency key header or parameter is documented or present in the OpenAPI. The
+    closest thing is VideoGenerationRequest.correlationId — a REQUIRED caller-supplied
+    external reference that is echoed on the response and used to fetch the result later
+    via GET /api/studio-avatar/generated-video/{correlationId}. It is a correlation handle
+    for retrieval, not a de-duplication key: nothing in the docs states that replaying a
+    POST with the same correlationId returns the original result instead of starting a
+    second generation. Recorded as absent rather than inferred, so NO Idempotency pointer
+    is emitted.
+pagination:
+  supported: false
+  style: none
+  note: >-
+    No cursor, offset, page or limit parameter appears anywhere in the spec or the docs.
+    The list-shaped operation (GET /api/v1/conversations) is bounded by a required time
+    window instead — dateStart and dateEnd Unix timestamps whose range must not exceed 24
+    hours — and returns the full conversations[] array for that window with no continuation
+    token. A caller with more than one window of history must page by walking time.
+filtering:
+  - {operation: 'GET /api/v1/conversations', param: dateStart, type: integer, required: true, note: Unix timestamp, seconds since epoch}
+  - {operation: 'GET /api/v1/conversations', param: dateEnd, type: integer, required: true, note: must be after dateStart and within 24 hours}
+  - {operation: 'GET /api/v1/conversations', param: liveAvatarId, type: string, required: false, note: optional UUID filter to a single avatar}
+field_expansion:
+  supported: false
+metadata:
+  supported: true
+  note: >-
+    VideoGenerationRequest.metadata is a free-form object for custom caller metadata on a
+    video. Live-avatar conversations additionally echo utm_id and utm_source captured from
+    the conversation URL, which is how a caller ties a conversation back to its own contact
+    record.
+request_tracing:
+  supported: true
+  header: x-request-id
+  direction: response
+  note: >-
+    Observed live on every unauthenticated response from api-prd.moonscale.com, including
+    401 and 403 (for example x-request-id 3805d2a1-1018-492c-92fa-788be44cd5e1). The header
+    is not documented, so a caller has no published guarantee about it; it is recorded here
+    because it was directly observed and is the only correlation handle available for support.
+error_envelope:
+  format: proprietary
+  shape: '{"message": "<human-readable string>"}'
+  rfc9457: false
+  content_type: application/json
+  note: >-
+    Not RFC 9457 problem+json. A flat single-key object with no type, title, status,
+    detail, instance or machine-readable code, so an agent cannot branch on error class —
+    only on HTTP status plus prose matching.
+  see: errors/moonscale-problem-types.yml
+rate_limit_signaling:
+  documented: false
+  headers_observed: []
+  note: >-
+    No RateLimit-*, X-RateLimit-* or Retry-After header was returned on any observed
+    response, and no limits are published. See rate-limits/moonscale-rate-limits.yml.
+async_pattern:
+  style: submit-then-poll-or-webhook
+  note: >-
+    Video generation is asynchronous. POST /api/studio-avatar/generate-video returns 201
+    with a status of PENDING; the caller then either polls GET
+    /api/studio-avatar/generated-video/{correlationId} until status is COMPLETED or FAILED,
+    or supplies webhookUrl on the request and is called back with the same payload. The
+    documented status enum is PENDING, PROCESSING, COMPLETED, FAILED. The third-party
+    Activepieces connector polls this at a 5 second interval and gives up after 300 seconds,
+    which is the only published indication of expected generation time.
+  see: asyncapi/moonscale-webhooks.yml
+spec_docs_divergence:
+  note: >-
+    The published OpenAPI and the published reference do not describe the same API. This is
+    a real interoperability hazard for any client generated from the spec, so it is recorded
+    rather than smoothed over.
+  divergences:
+  - The reference documents GET /api/v1/conversations (conversations by date range) and GET /api/v1/avatars (in the API-key example request); neither path exists in the OpenAPI.
+  - The OpenAPI keys a single conversation by {conversationShortCode}; the reference keys the same operation by {conversationId} (UUID).
+  - The OpenAPI's ApiLiveAvatarCreateRoomRequest requires name and liveAvatarShortCode; the reference documents liveAvatarId, conversationShortCode, contactEmail, privacy, enableChat, roomSettings and context.
+  - The OpenAPI's create-room response returns conversationShortCode; the reference returns conversationId.
+  - The OpenAPI declares no operationIds on any of its four operations, so generated clients get synthesized method names.
+  - The OpenAPI's servers[] is http://sandbox.mintlify.com, a Mintlify template default over plain HTTP, not a Moonscale host.

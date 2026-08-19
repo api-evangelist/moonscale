@@ -1,0 +1,100 @@
+generated: '2026-08-14'
+method: searched
+source: https://vidlab7-d7584a5d.mintlify.app/llms-full.txt
+note: >-
+  Captured verbatim from Moonscale's own published reference. The OpenAPI itself carries NO
+  examples on any request or response, so every example below exists only in the prose
+  documentation — which is precisely why they are worth capturing: a client generated from
+  the spec alone gets none of this. Placeholder values are Moonscale's own; no value has
+  been invented, and <YOUR_API_KEY> is the provider's own placeholder, not a real key.
+examples:
+- operation: 'GET /api/v1/avatars'
+  title: Authenticate a request with an API key
+  source: https://vidlab7-d7584a5d.mintlify.app/api-reference/endpoint/createApiKey
+  request: |
+    curl --request GET 'https://api-prd.moonscale.com/api/v1/avatars' \
+    --header 'x-api-key: <YOUR_API_KEY>'
+  note: the only published reference to the list-avatars operation; it appears in no other document
+- operation: 'POST /api/v1/rooms'
+  title: Create a live meeting room
+  source: https://vidlab7-d7584a5d.mintlify.app/api-reference/endpoint/liveAvatarsCreateRoom
+  request: |
+    curl --location --request POST 'https://api-prd.moonscale.com/api/v1/rooms' \
+    --header 'Content-Type: application/json' \
+    --header 'x-api-key: <YOUR_API_KEY>' \
+    --data-raw '{
+        "name": "room-name",
+        "liveAvatarId": "avatar-uuid",
+        "conversationShortCode": "conversation-shortcode",
+        "contactEmail": "name@example.com",
+        "privacy": "private",
+        "enableChat": true,
+        "roomSettings": { "shouldBotJoinImmediately": false },
+        "context": "context"
+    }'
+  response_201: |
+    {
+        "url": "https://your-daily-room-url",
+        "conversationId": "conversation-id"
+    }
+  defect_note: >-
+    The example body as published on the documentation page is not valid JSON — it wraps the
+    object in a second pair of braces and omits commas after "conversation-shortcode" and
+    "name@example.com". The body above is the same example with those syntax errors
+    corrected so it parses; no field name or value has been changed, added or removed.
+- operation: 'GET /api/v1/conversations/{conversationId}'
+  title: Get a single meeting transcript and summary
+  source: https://vidlab7-d7584a5d.mintlify.app/api-reference/endpoint/liveAvatarsGetTranscript
+  request: |
+    curl --location --request GET 'https://api-prd.moonscale.com/api/v1/conversations/{conversationId}' \
+    --header 'Content-Type: application/json' \
+    --header 'x-api-key: <YOUR_API_KEY>'
+  response_200: |
+    {
+        "transcript": [
+            {
+                "role": "assistant",
+                "type": "type",
+                "text": "text",
+                "timestamp": "date-time-timestamp"
+            }
+        ],
+        "summary": "summary"
+    }
+- operation: 'GET /api/v1/conversations'
+  title: List conversations in a time window
+  source: https://vidlab7-d7584a5d.mintlify.app/api-reference/endpoint/liveAvatarsGetConversationsByDate
+  request: |
+    curl --location --request GET 'https://api-prd.moonscale.com/api/v1/conversations?dateStart=1700000000&dateEnd=1700086400' \
+    --header 'Content-Type: application/json' \
+    --header 'x-api-key: <YOUR_API_KEY>'
+  response_200: |
+    {
+        "conversations": [
+            {
+                "conversationId": "uuid",
+                "startTimestamp": "2024-01-01T00:00:00.000Z",
+                "durationSeconds": 120,
+                "utm_id": "contact-id",
+                "utm_source": "source",
+                "transcript": [
+                    {
+                        "role": "assistant",
+                        "type": "type",
+                        "text": "text",
+                        "timestamp": "2024-01-01T00:00:00.000Z"
+                    }
+                ],
+                "summary": "AI-generated summary of the conversation",
+                "liveAvatarId": "uuid"
+            }
+        ]
+    }
+coverage:
+  operations_in_spec: 4
+  operations_with_examples_in_spec: 0
+  operations_with_examples_in_docs: 4
+  note: >-
+    The two video-generation operations have no published request or response example in
+    either the spec or the reference; their shapes are only knowable from the component
+    schemas.

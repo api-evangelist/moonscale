@@ -1,0 +1,103 @@
+generated: '2026-08-14'
+method: derived
+source: openapi/moonscale-openapi-original.json
+docs: https://vidlab7-d7584a5d.mintlify.app/api-reference/endpoint/liveAvatarsGetConversationsByDate
+note: >-
+  Derived from the six component schemas in the published OpenAPI plus the response shapes
+  documented in the reference. Moonscale's spec declares no top-level resource schemas — it
+  only declares request and response envelopes — so the entities below are the resources
+  those envelopes describe, and the identifier fields are the join keys.
+domains:
+- name: liveAvatar
+  description: Real-time conversational avatars that host meeting rooms and produce transcripts.
+  operations: ['GET /api/v1/conversations/{conversationShortCode}', 'POST /api/v1/rooms', 'GET /api/v1/conversations', 'GET /api/v1/avatars']
+- name: videoGeneration
+  description: Asynchronous studio-avatar video rendering from a script and a voice.
+  operations: ['POST /api/studio-avatar/generate-video', 'GET /api/studio-avatar/generated-video/{correlationId}']
+entities:
+- name: LiveAvatar
+  identifiers:
+  - {field: liveAvatarId, format: uuid, source: reference, note: 'read from the Studio URL https://app.moonscale.com/real-time-avatars/<liveAvatarId>'}
+  - {field: liveAvatarShortCode, format: string, source: openapi, note: 'the OpenAPI keys the same entity by short code, not by UUID'}
+  note: >-
+    No schema for the avatar itself is published. The reference's API-key example calls
+    GET /api/v1/avatars, so a list endpoint exists, but its response shape is undocumented.
+  configured_via: Moonscale Studio only — name, voice, system prompt, guardrails, knowledge base, contact collection, language, greeting, max call length, camera toggle, web search capability. The documentation states the Studio exposes settings the API does not.
+- name: Room
+  description: A single-participant timed meeting room hosting a live avatar.
+  request_schema: openapi/moonscale-openapi-original.json#/components/schemas/ApiLiveAvatarCreateRoomRequest
+  response_schema: openapi/moonscale-openapi-original.json#/components/schemas/ApiLiveAvatarCreateRoomResponse
+  fields:
+  - {name: name, type: string, required: true}
+  - {name: liveAvatarShortCode, type: string, required: true, note: 'reference documents this as liveAvatarId instead'}
+  - {name: privacy, type: string, enum: [public, private]}
+  - {name: properties, type: object, note: 'the OpenAPI says these are Daily API room properties; the reference calls the field roomSettings and documents only shouldBotJoinImmediately'}
+  - {name: contactEmail, type: string, source: reference-only}
+  - {name: enableChat, type: boolean, default: true, source: reference-only}
+  - {name: context, type: string, source: reference-only}
+  returns:
+  - {name: url, type: string, note: 'the meeting-room URL with an entry token already attached'}
+  - {name: conversationShortCode, type: string, note: 'reference returns conversationId instead'}
+  third_party: >-
+    The OpenAPI names Daily (daily.co) as the source of the room properties vocabulary,
+    which identifies the underlying real-time video transport.
+- name: Conversation
+  description: A recorded exchange between a participant and a live avatar.
+  response_schema: openapi/moonscale-openapi-original.json#/components/schemas/ApiLiveAvatarConversationsResponse
+  identifiers:
+  - {field: conversationShortCode, source: openapi}
+  - {field: conversationId, format: uuid, source: reference}
+  fields:
+  - {name: transcript, type: array, note: 'array of Transcript entries'}
+  - {name: summary, type: 'object|string', note: 'OpenAPI models summary as an object with a text property; the reference returns summary as a plain string — a genuine shape conflict between the two published sources'}
+  - {name: startTimestamp, type: 'string|null', format: date-time, source: reference-only}
+  - {name: durationSeconds, type: 'integer|null', source: reference-only}
+  - {name: utm_id, type: 'string|null', source: reference-only, note: 'the Contact ID passed through the conversation URL — the join key back to the caller''s own CRM record'}
+  - {name: utm_source, type: 'string|null', source: reference-only}
+  - {name: liveAvatarId, type: string, format: uuid, source: reference-only}
+  pii: >-
+    Transcripts contain participant speech and, where contact collection is enabled, name
+    and email. Studio offers a transcript anonymization toggle that redacts personal
+    identifiers in stored transcripts.
+- name: Transcript
+  description: One utterance within a conversation.
+  fields:
+  - {name: role, type: string, note: 'user or assistant'}
+  - {name: text, type: string, source: reference, note: 'the OpenAPI calls this field content, the reference calls it text — a second shape conflict'}
+  - {name: type, type: string}
+  - {name: timestamp, type: string, format: date-time}
+- name: GeneratedVideo
+  description: An asynchronously rendered studio-avatar video.
+  request_schema: openapi/moonscale-openapi-original.json#/components/schemas/VideoGenerationRequest
+  response_schema: openapi/moonscale-openapi-original.json#/components/schemas/GetGeneratedVideoByCorrelationIdResponse
+  identifiers:
+  - {field: id, note: internal identifier minted by Moonscale}
+  - {field: correlationId, note: caller-supplied external reference; required on create and the key used for retrieval}
+  fields:
+  - {name: avatarId, type: string, required: true}
+  - {name: script, type: string, required: true}
+  - {name: voiceId, type: string, required: true}
+  - {name: webhookUrl, type: string, required: false}
+  - {name: metadata, type: object, required: false}
+  - {name: status, type: string, enum: [PENDING, PROCESSING, COMPLETED, FAILED]}
+  - {name: videoUrl, type: string}
+  lifecycle: PENDING -> PROCESSING -> COMPLETED | FAILED
+relationships:
+- {from: Room, to: LiveAvatar, type: belongs_to, via: liveAvatarShortCode, note: 'reference uses liveAvatarId'}
+- {from: Room, to: Conversation, type: has_one, via: conversationShortCode, note: 'creating a room mints the conversation handle used to fetch the transcript'}
+- {from: Conversation, to: LiveAvatar, type: belongs_to, via: liveAvatarId}
+- {from: Conversation, to: Transcript, type: has_many, via: 'transcript[]'}
+- {from: GeneratedVideo, to: LiveAvatar, type: references, via: avatarId, note: 'the spec does not state whether a studio avatarId and a liveAvatarId share an identifier space; treat them as distinct until Moonscale documents otherwise'}
+id_formats:
+- {entity: LiveAvatar, format: uuid, evidence: 'reference: "the liveAvatarId is in uuid format"'}
+- {entity: Conversation, format: uuid, evidence: 'reference: "Unique identifier (UUID) of the conversation"'}
+- {entity: Room, format: short-code, evidence: openapi}
+- {entity: GeneratedVideo, format: caller-supplied string, evidence: 'correlationId is an "External reference identifier provided by the user"'}
+schema_defects:
+- >-
+    ApiLiveAvatarConversationsResponse.transcript declares "type": "Transcript[]", which is
+    not a valid JSON Schema type. The correct declaration is "type": "array" with the
+    existing items subschema. Any strict OpenAPI validator or code generator will reject or
+    mis-handle this property.
+- The spec declares no operationId on any of its four operations.
+- The spec declares no root-level tags[] object even though both operations groups carry tag values (liveAvatar, videoGeneration).

@@ -1,0 +1,69 @@
+generated: '2026-08-14'
+method: probed
+source: live GET probes of every Moonscale host found in apis.yml, the published OpenAPI and the docs
+note: >-
+  Every /.well-known/ path probed returned a miss on every host. The marketing host
+  (www.moonscale.com, Webflow) answers 404 with an "Invalid .well-known request" HTML
+  stub for the entire /.well-known/ namespace. The Studio SPA (app.moonscale.com,
+  studio.vidlab7.com, Vercel/Next.js) answers 404 with the app's HTML shell. The API host
+  (api-prd.moonscale.com and its pre-rename alias api-prd.vidlab7.com) answers
+  403 {"message":"Forbidden"} for every path except /health (401) and /robots.txt (200),
+  because the API gateway rejects unauthenticated requests before routing. NO document was
+  returned on any path, so NO WellKnown or SecurityTxt pointer is emitted — this file
+  records a verified absence, not a presence.
+hosts:
+- host: https://www.moonscale.com
+  role: marketing site (Webflow)
+  documents:
+  - {path: /.well-known/security.txt, status: 404, file: null}
+  - {path: /.well-known/openid-configuration, status: 404, file: null}
+  - {path: /.well-known/oauth-authorization-server, status: 404, file: null}
+  - {path: /.well-known/api-catalog, status: 404, file: null}
+  - {path: /.well-known/ai-plugin.json, status: 404, file: null}
+  - {path: /.well-known/agent-card.json, status: 404, file: null}
+  - {path: /.well-known/agent.json, status: 404, file: null}
+- host: https://api-prd.moonscale.com
+  role: production API host (Google Frontend)
+  note: >-
+    403 here is the gateway's blanket unauthenticated response, not a routed 404 — the
+    absence of a document is inferred from the gateway posture plus the absence of any
+    reference to a well-known surface in the published docs.
+  documents:
+  - {path: /.well-known/security.txt, status: 403, file: null}
+  - {path: /.well-known/openid-configuration, status: 403, file: null}
+  - {path: /.well-known/oauth-protected-resource, status: 403, file: null}
+  - {path: /.well-known/agent-card.json, status: 403, file: null}
+  - {path: /.well-known/agent.json, status: 403, file: null}
+- host: https://app.moonscale.com
+  role: Moonscale Studio application (Vercel/Next.js)
+  note: >-
+    robots.txt on this host is "User-agent: * / Disallow: /" and additionally names GPTBot,
+    ChatGPT-User and CCBot; probing stopped after the initial sweep.
+  documents:
+  - {path: /.well-known/security.txt, status: 404, file: null}
+  - {path: /.well-known/agent-card.json, status: 404, file: null}
+  - {path: /.well-known/agent.json, status: 404, file: null}
+  - {path: /.well-known/openid-configuration, status: 404, file: null}
+  - {path: /.well-known/oauth-authorization-server, status: 404, file: null}
+  - {path: /.well-known/oauth-protected-resource, status: 404, file: null}
+  - {path: /.well-known/api-catalog, status: 404, file: null}
+  - {path: /.well-known/ai-plugin.json, status: 404, file: null}
+- host: https://studio.vidlab7.com
+  role: pre-rename alias of the Studio application
+  documents:
+  - {path: /.well-known/security.txt, status: 404, file: null}
+  - {path: /.well-known/agent-card.json, status: 404, file: null}
+  - {path: /.well-known/agent.json, status: 404, file: null}
+  - {path: /.well-known/openid-configuration, status: 404, file: null}
+documents_found: 0
+adjacent_signals:
+- signal: Content-Signal
+  value: 'ai-train=yes, search=yes, ai-input=yes'
+  served_at: https://vidlab7-d7584a5d.mintlify.app/robots.txt
+  status: 200
+  note: >-
+    A real, served AI-usage consent directive, but it is the Mintlify documentation
+    platform's default for hosted docs sites rather than something Moonscale authored or
+    serves from a moonscale.com host. Recorded as evidence only; NO ContentSignal or
+    consent pointer is emitted, because the check asserts the provider publishes the
+    signal on its own surface.

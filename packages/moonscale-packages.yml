@@ -1,0 +1,46 @@
+generated: '2026-08-14'
+method: searched
+source: >-
+  registry.npmjs.org, pypi.org, and the published Moonscale documentation at
+  https://vidlab7-d7584a5d.mintlify.app/api-reference/introduction
+official_sdk_count: 0
+note: >-
+  Moonscale ships NO first-party client library in any language. Searched npm (zero results
+  for "moonscale", no @moonscale scope), PyPI (moonscale returns "Not Found"), and the
+  documentation, which teaches the API exclusively through raw curl examples and never
+  references an SDK. Because official_sdk_count is 0, NO SDKs pointer is emitted — the only
+  package below is third-party. The GitHub organisation github.com/vidlab7 exists (created
+  2024-01-22) but publishes zero public repositories; github.com/moonscale is an unrelated
+  Paris-based account that predates this company and is NOT wired as a GitHubOrganization
+  pointer.
+packages:
+- language: typescript
+  registry: npm
+  name: "@activepieces/piece-vidlab7"
+  url: https://www.npmjs.com/package/@activepieces/piece-vidlab7
+  install: npm install @activepieces/piece-vidlab7
+  official: false
+  publisher: Activepieces (abdulyki@activepieces.com)
+  version: 0.1.7
+  published: '2026-08-04'
+  first_published: '2025-12-08'
+  release_count: 9
+  note: >-
+    A third-party Activepieces automation connector, not a Moonscale SDK. It is listed here
+    because it is the only published, versioned, machine-readable client for this API and
+    because it independently corroborates the contract: it authenticates with the x-api-key
+    header, calls POST /api/studio-avatar/generate-video and GET
+    /api/studio-avatar/generated-video/{id}, and its bundled help text points users at the
+    Studio's API section to generate a key. It still targets the PRE-RENAME host
+    api-prd.vidlab7.com even in the 2026-08-04 release, while Moonscale's own documentation
+    has moved to api-prd.moonscale.com.
+  capabilities: [Create Video]
+registries_checked:
+- {registry: npm, query: moonscale, result: 0 packages, status: 200}
+- {registry: npm, query: vidlab7, result: '@activepieces/piece-vidlab7 (third-party)', status: 200}
+- {registry: pypi, query: moonscale, result: not found, status: 404}
+- {registry: github, query: 'orgs/vidlab7', result: '0 public repos', status: 200}
+- {registry: github, query: 'orgs/moonscale', result: 'unrelated Paris account, not this company', status: 200}
+third_party_integration_surfaces:
+- {platform: Activepieces, url: 'https://www.npmjs.com/package/@activepieces/piece-vidlab7', status: 200}
+- {platform: Zapier, url: 'https://zapier.com/apps/vidlab7/integrations', status: 200, note: 'listed under the pre-rename VidLab7 brand; create-video action'}

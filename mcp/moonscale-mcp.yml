@@ -1,0 +1,81 @@
+generated: '2026-08-14'
+method: derived
+status: candidate
+source: openapi/moonscale-openapi-original.json
+deployment:
+  mode: none
+  endpoint: null
+  install: null
+  package: null
+  auth: unknown
+  verified: probed
+  note: >-
+    Moonscale ships NO MCP server, hosted or local. Probed: /mcp and /api/mcp return 403 on
+    api-prd.moonscale.com (the gateway's blanket unauthenticated response) and 404 on
+    app.moonscale.com; mcp.moonscale.com does not resolve; npm has zero packages matching
+    "moonscale" and no @moonscale scope; the published docs, llms.txt and OpenAPI make no
+    mention of MCP. The tools below are a DERIVED CANDIDATE mapped one-to-one from the four
+    real operations in the published OpenAPI — a design proposal, not a surface anyone can
+    call. No endpoint URL is asserted because none exists.
+server:
+  name: moonscale
+  transport: null
+  url: null
+tools:
+- name: create_meeting_room
+  description: Create a live meeting room hosted by an AI sales avatar, returning a join URL with an entry token attached.
+  source_operation: openapi/moonscale-openapi-original.json#/paths/~1api~1v1~1rooms/post
+  method: POST
+  path: /api/v1/rooms
+  input_schema: openapi/moonscale-openapi-original.json#/components/schemas/ApiLiveAvatarCreateRoomRequest
+  action_class: acting
+  consequence: write
+- name: get_conversation_transcript
+  description: Retrieve the transcript and AI-generated summary of a conversation that took place in a live meeting room.
+  source_operation: openapi/moonscale-openapi-original.json#/paths/~1api~1v1~1conversations~1{conversationShortCode}/get
+  method: GET
+  path: /api/v1/conversations/{conversationShortCode}
+  action_class: read
+  consequence: read
+  note: returns participant speech and, where contact collection is enabled, personal data
+- name: generate_avatar_video
+  description: Start an asynchronous studio-avatar video render from a script and a voice, returning a PENDING status and the caller's correlation id.
+  source_operation: openapi/moonscale-openapi-original.json#/paths/~1api~1studio-avatar~1generate-video/post
+  method: POST
+  path: /api/studio-avatar/generate-video
+  input_schema: openapi/moonscale-openapi-original.json#/components/schemas/VideoGenerationRequest
+  action_class: acting
+  consequence: write
+  note: consumes generation credits; not idempotent — replaying with the same correlationId has no documented de-duplication behaviour
+- name: get_generated_video
+  description: Fetch the current status and, once COMPLETED, the video URL for a previously started generation, keyed by the caller's correlation id.
+  source_operation: openapi/moonscale-openapi-original.json#/paths/~1api~1studio-avatar~1generated-video~1{correlationId}/get
+  method: GET
+  path: /api/studio-avatar/generated-video/{correlationId}
+  action_class: read
+  consequence: read
+candidate_tools_from_docs:
+- name: list_conversations_by_date
+  description: List conversations across all avatars in the workspace within a time window of at most 24 hours.
+  documented_at: https://vidlab7-d7584a5d.mintlify.app/api-reference/endpoint/liveAvatarsGetConversationsByDate
+  method: GET
+  path: /api/v1/conversations
+  note: documented in the reference but ABSENT from the published OpenAPI, so it has no machine-readable input schema
+- name: list_avatars
+  method: GET
+  path: /api/v1/avatars
+  note: >-
+    appears only in the API-key page's example curl request; no parameters, response shape
+    or description is published anywhere, so it cannot be bound to a real schema
+auth:
+  scheme: apiKey
+  header: x-api-key
+  see: authentication/moonscale-authentication.yml
+  note: >-
+    Any MCP server built over this API would need to carry a per-tenant x-api-key, and
+    Moonscale gates key issuance behind a feature flag plus a support request.
+probe_evidence:
+- {url: 'https://api-prd.moonscale.com/mcp', status: 403}
+- {url: 'https://app.moonscale.com/mcp', status: 404}
+- {url: 'https://app.moonscale.com/api/mcp', status: 404}
+- {url: 'https://registry.npmjs.org/-/v1/search?text=moonscale', status: 200, result: 'total 0'}

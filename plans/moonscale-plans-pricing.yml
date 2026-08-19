@@ -1,0 +1,30 @@
+generated: '2026-08-14'
+method: searched
+source: https://www.moonscale.com/sitemap.xml
+plan_count: 0
+pricing_page: null
+currency: null
+note: >-
+  Moonscale publishes no pricing page and no plan tiers. https://www.moonscale.com/pricing
+  returns HTTP 404, and the site's complete sitemap (24 English URLs plus a German mirror)
+  contains only the home page, blog posts, career, contact, live-demo and the legal pages —
+  there is no pricing, plans, or packages URL of any kind. Every commercial call to action
+  on the site is "Request access", "See live demo" or "Talk to an Expert", all of which
+  route to a contact form. API access is separately feature-flagged and requires emailing
+  support@moonscale.com. This is an enterprise contact-sales motion with no published
+  price, so plan_count is a real zero rather than an omission.
+plans: []
+access_model:
+  motion: contact-sales
+  self_service_signup: false
+  free_tier: false
+  trial_published: false
+  api_access: feature-flagged, granted on request via support@moonscale.com
+evidence:
+- {url: 'https://www.moonscale.com/pricing', status: 404}
+- {url: 'https://www.moonscale.com/sitemap.xml', status: 200, note: 'no pricing URL present'}
+- {url: 'https://vidlab7-d7584a5d.mintlify.app/api-reference/endpoint/createApiKey', status: 200, note: 'states API access is feature-flagged and may not be enabled for an account'}
+related_note: >-
+  The blog carries a marketing article titled "AI sales avatar pricing: what it costs and
+  what you get", but it discusses category pricing generally and publishes no Moonscale
+  tier, price, quota or overage, so it is not recorded as a plan source.

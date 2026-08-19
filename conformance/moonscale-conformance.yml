@@ -1,0 +1,82 @@
+generated: '2026-08-14'
+method: derived
+source: openapi/moonscale-openapi-original.json
+docs: https://vidlab7-d7584a5d.mintlify.app/api-reference/introduction
+standards:
+- id: openapi-3.0
+  conforms: true
+  evidence: 'openapi: 3.0.1 with four documented paths and six component schemas, served at https://vidlab7-d7584a5d.mintlify.app/api-reference/openapi.json (HTTP 200)'
+- id: openapi-3.1
+  conforms: false
+  evidence: the published document is 3.0.1
+- id: json-schema-2020-12
+  conforms: false
+  evidence: >-
+    OpenAPI 3.0.1 uses the older JSON Schema dialect, and one property declares an invalid
+    type ("Transcript[]"), so the schemas are not valid under any JSON Schema dialect.
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: 'errors return a flat {"message": "..."} object as application/json, not application/problem+json'
+- id: oauth2
+  conforms: false
+  evidence: the only securityScheme is apiKey in the x-api-key header
+- id: oidc
+  conforms: false
+  evidence: no openIdConnect scheme; /.well-known/openid-configuration is absent on every host
+- id: api-key-auth
+  conforms: true
+  evidence: 'components.securitySchemes.ApiKeyAuth: {type: apiKey, in: header, name: x-api-key}, applied globally and repeated per operation'
+- id: tls-https
+  conforms: true
+  evidence: >-
+    api-prd.moonscale.com and www.moonscale.com serve over HTTPS; www.moonscale.com
+    negotiates TLSv1.3 with HSTS max-age 31536000. NOTE the published OpenAPI's servers[]
+    entry is plain http:// (http://sandbox.mintlify.com), which is a Mintlify template
+    default and not a Moonscale endpoint.
+- id: rfc8594-sunset-header
+  conforms: false
+  evidence: no Sunset or Deprecation header observed; no deprecation policy published
+- id: rfc9116-security-txt
+  conforms: false
+  evidence: /.well-known/security.txt returns 404 on www.moonscale.com and app.moonscale.com and 403 on api-prd.moonscale.com
+- id: idempotency-key
+  conforms: false
+  evidence: no idempotency key header or parameter in the spec or the docs
+- id: pagination
+  conforms: false
+  evidence: no cursor/offset/page/limit parameter anywhere; the one list operation is bounded by a required 24-hour time window with no continuation token
+- id: rate-limit-headers
+  conforms: false
+  evidence: no RateLimit-*, X-RateLimit-* or Retry-After header observed on any response
+- id: webhooks
+  conforms: partial
+  evidence: >-
+    a real caller-registered callback exists (VideoGenerationRequest.webhookUrl) with a
+    documented payload, but no signature verification, retry policy, or delivery guarantee
+    is published
+- id: asyncapi
+  conforms: false
+  evidence: no AsyncAPI document published
+- id: mcp
+  conforms: false
+  evidence: no MCP server published; /mcp returns 403 on the API host and 404 on the app host
+- id: a2a
+  conforms: false
+  evidence: /.well-known/agent-card.json and /.well-known/agent.json miss on every host
+- id: llms-txt
+  conforms: true
+  evidence: 'https://vidlab7-d7584a5d.mintlify.app/llms.txt returns HTTP 200 with a Moonscale-titled index and a link to the OpenAPI'
+- id: gdpr
+  conforms: unknown
+  evidence: >-
+    Moonscale is a Munich-headquartered company processing conversation transcripts and
+    contact details of EU data subjects, and its site publishes a privacy policy, an
+    imprint (Impressum) and terms. Studio offers transcript anonymization. No certification,
+    DPA, sub-processor list or trust page was found, so no compliance claim is asserted here.
+certifications: []
+compliance_program_published: false
+note: >-
+  No published certification (SOC 2, ISO 27001, PCI DSS, HIPAA, FedRAMP) and no trust
+  center were found on any Moonscale host, so NO Compliance pointer is emitted from this
+  file. The German-law legal pages (Impressum, privacy policy, terms) are recorded as
+  apis.yml link properties, not as a compliance program.

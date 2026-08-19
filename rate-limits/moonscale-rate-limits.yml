@@ -1,0 +1,34 @@
+generated: '2026-08-14'
+method: probed
+source: >-
+  live unauthenticated responses from https://api-prd.moonscale.com plus the published
+  reference at https://vidlab7-d7584a5d.mintlify.app/api-reference/introduction
+limit_count: 0
+note: >-
+  Moonscale publishes NO rate limits. No quota, burst, per-key or per-account limit appears
+  in the reference, the OpenAPI, or anywhere on the site, and no rate-limit response header
+  was returned on any observed response. An integrator has no published signal for how much
+  they may call, and no runtime signal for how much they have left — an agent cannot back
+  off on anything but a raw failure. Recorded as a verified zero.
+limits: []
+response_headers:
+  observed: []
+  documented: []
+  note: >-
+    Every response from api-prd.moonscale.com was inspected for RateLimit-*, X-RateLimit-*
+    and Retry-After. None were present. The only correlation header returned is
+    x-request-id (undocumented), alongside server: Google Frontend.
+exhaustion_status: null
+retry_guidance_published: false
+adjacent_constraints:
+  note: >-
+    These are documented request constraints, not rate limits. They are recorded separately
+    so they are never miscounted as published limits.
+  constraints:
+  - {constraint: 'GET /api/v1/conversations date window', value: 'dateEnd minus dateStart must not exceed 24 hours', consequence: 'HTTP 400', source: 'https://vidlab7-d7584a5d.mintlify.app/api-reference/endpoint/liveAvatarsGetConversationsByDate'}
+  - {constraint: 'live meeting room duration', value: 'a per-avatar maximum call length in minutes, configured in Studio; the session ends automatically when it elapses', source: 'https://vidlab7-d7584a5d.mintlify.app/api-reference/endpoint/configureRealTimeAvatar'}
+  - {constraint: 'meeting room participants', value: 'a room is accessible to a single participant', source: openapi/moonscale-openapi-original.json}
+  - {constraint: 'video generation wall time', value: 'the third-party Activepieces connector polls every 5s and abandons after 300s', source: 'https://www.npmjs.com/package/@activepieces/piece-vidlab7', note: 'a third-party client timeout, NOT a Moonscale-published SLA'}
+evidence:
+- {url: 'https://api-prd.moonscale.com/health', status: 401, headers: 'x-request-id, server: Google Frontend — no rate-limit headers'}
+- {url: 'https://api-prd.moonscale.com/api/v1/conversations', status: 403, headers: 'x-request-id, server: Google Frontend — no rate-limit headers'}

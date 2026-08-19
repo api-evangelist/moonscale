@@ -1,0 +1,64 @@
+generated: '2026-08-14'
+method: searched
+source: >-
+  https://vidlab7-d7584a5d.mintlify.app/api-reference/introduction and
+  openapi/moonscale-openapi-original.json
+versioning:
+  scheme: uri-path
+  current: v1
+  spec_version: 1.0.1
+  docs: https://vidlab7-d7584a5d.mintlify.app/api-reference/introduction
+  note: >-
+    Two conventions coexist. The live-avatar operations are versioned in the path at
+    /api/v1/; the video-generation operations are unversioned at /api/studio-avatar/.
+    info.version in the OpenAPI is 1.0.1 and is not tied to the path version.
+deprecation:
+  policy_url: null
+  policy_published: false
+  sunset_header: false
+  deprecation_header: false
+  note: >-
+    No deprecation or sunset policy is published, and no RFC 8594 Deprecation or Sunset
+    header was observed on any probed response. No Deprecation pointer is emitted.
+sla:
+  url: null
+  uptime_target: null
+  published: false
+status_page:
+  url: null
+  published: false
+  note: >-
+    No status page exists. status.moonscale.com does not resolve (NXDOMAIN), no
+    status.io/statuspage.io/instatus property is linked from the site, and the marketing
+    site's complete sitemap (home, blog, career, contact, live-demo, legal, and the German
+    /de mirror) contains no status page. No StatusPage pointer is emitted.
+changelog:
+  url: null
+  published: false
+  note: >-
+    No dated API changelog or release-notes page is published. The blog at
+    /blog is marketing content, not release notes, so no ChangeLog artifact is emitted.
+deprecated_operations: []
+brand_lifecycle:
+  event: rename
+  from: VidLab7
+  to: Moonscale
+  year: 2026
+  note: >-
+    The company shipped its API as VidLab7 and renamed to Moonscale. Both API hosts remain
+    live — api-prd.moonscale.com (current, used throughout the documentation) and
+    api-prd.vidlab7.com (pre-rename, still hard-coded in the third-party Activepieces
+    connector published 2026-08-04). No deprecation notice, sunset date, or migration guide
+    for the old host is published, so integrators on the legacy host have no announced
+    end-of-life.
+  evidence:
+  - {url: 'https://api-prd.moonscale.com/health', status: 401}
+  - {url: 'https://api-prd.vidlab7.com/health', status: 401}
+  - {url: 'https://www.npmjs.com/package/@activepieces/piece-vidlab7', note: 'v0.1.7 published 2026-08-04, targets api-prd.vidlab7.com'}
+availability:
+  api_access: feature-flagged
+  note: >-
+    Moonscale's own documentation states API access is feature-flagged and may not be
+    enabled on an account; users without the API section in Studio are directed to email
+    support@moonscale.com to request access. The reference and the OpenAPI are public, but
+    the credential is not self-service.

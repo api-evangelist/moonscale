@@ -1,0 +1,55 @@
+generated: '2026-08-14'
+method: derived
+source: openapi/moonscale-openapi-original.json
+docs: https://vidlab7-d7584a5d.mintlify.app/api-reference/openapi.json
+spec_type: none
+asyncapi_published: false
+note: >-
+  Moonscale publishes no AsyncAPI document and no event-catalog page. It does ship a real,
+  caller-registered webhook: VideoGenerationRequest.webhookUrl is an optional callback URL
+  on POST /api/studio-avatar/generate-video, and the OpenAPI states plainly that the
+  payload delivered to it is the same document returned by GET
+  /api/studio-avatar/generated-video/{correlationId} ("Get generated video (same as webhook
+  payload) by correlation ID"). That is enough to describe the event surface faithfully
+  without inventing anything, so the webhook catalog below is derived from the spec's own
+  schemas. No AsyncAPI pointer is emitted, because no AsyncAPI document exists.
+registration:
+  model: per-request
+  where: VideoGenerationRequest.webhookUrl
+  scope: one callback URL supplied on each individual generation request
+  note: >-
+    There is no webhook-endpoint management API and no dashboard-registered global endpoint
+    documented. A caller that omits webhookUrl gets no callback and must poll.
+  management_api: false
+webhooks:
+- event: video-generation.completed
+  trigger: an asynchronous studio-avatar video generation reaches a terminal state
+  delivery: HTTP POST to the caller-supplied webhookUrl
+  payload_schema: openapi/moonscale-openapi-original.json#/components/schemas/GetGeneratedVideoByCorrelationIdResponse
+  payload_fields:
+  - {name: id, type: string, description: Unique identifier for the generated video}
+  - {name: correlationId, type: string, description: The caller's own external reference, echoed back}
+  - {name: status, type: string, enum: [PENDING, PROCESSING, COMPLETED, FAILED]}
+  - {name: videoUrl, type: string, description: URL where the generated video can be accessed}
+  - {name: avatarId, type: string}
+  - {name: voiceId, type: string}
+  - {name: script, type: string, description: The script content used for the video}
+  correlation: correlationId — caller-supplied on the request, echoed on the callback
+  polling_equivalent: 'GET /api/studio-avatar/generated-video/{correlationId}'
+gaps:
+  signature_verification: >-
+    UNDOCUMENTED. No signing secret, HMAC header, or timestamp header is published, so a
+    receiver has no published way to verify a callback genuinely came from Moonscale. This
+    is the most consequential gap in the event surface.
+  retry_policy: UNDOCUMENTED. No retry count, backoff schedule, or dead-letter behaviour is published.
+  delivery_guarantee: UNDOCUMENTED. At-least-once versus at-most-once is not stated.
+  expected_response: UNDOCUMENTED. No required receiver status code or acknowledgement contract is published.
+  source_ips: UNDOCUMENTED. No egress IP range is published for allowlisting.
+  event_types: >-
+    Only one payload shape is documented. Whether a FAILED generation is delivered to the
+    webhook at all — or only surfaces on a poll — is not stated.
+  observed_client_behaviour: >-
+    The third-party Activepieces connector does not rely on the webhook; when asked to wait
+    for completion it polls GET /api/studio-avatar/generated-video/{correlationId} every 5
+    seconds and times out after 300 seconds. That is a third party's choice, not a
+    Moonscale-published SLA, and is recorded only as an observed integration pattern.

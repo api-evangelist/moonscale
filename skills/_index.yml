@@ -1,0 +1,28 @@
+generated: '2026-08-14'
+method: generated
+source: openapi/moonscale-openapi-original.json + https://vidlab7-d7584a5d.mintlify.app/llms-full.txt
+note: >-
+  One skill per marquee flow in the Moonscale API. The published OpenAPI declares NO
+  operationIds on any of its four operations, so every step in these skills is grounded in
+  a verified method and path from the spec (or, where noted, from Moonscale's published
+  reference) rather than in an operation name. Nothing is invented.
+skills:
+- file: moonscale-run-live-avatar-meeting.md
+  name: Run a live AI sales avatar meeting and collect the transcript
+  api: openapi/moonscale-openapi-original.json
+  operations:
+  - 'POST /api/v1/rooms'
+  - 'GET /api/v1/conversations/{conversationShortCode}'
+  - 'GET /api/v1/conversations'
+  covers: [liveAvatar]
+- file: moonscale-generate-avatar-video.md
+  name: Generate a studio avatar video and collect the result
+  api: openapi/moonscale-openapi-original.json
+  operations:
+  - 'POST /api/studio-avatar/generate-video'
+  - 'GET /api/studio-avatar/generated-video/{correlationId}'
+  covers: [videoGeneration]
+coverage:
+  spec_operations: 4
+  operations_covered: 4
+  docs_only_operations_covered: 2

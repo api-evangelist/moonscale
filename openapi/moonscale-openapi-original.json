@@ -1,0 +1,357 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Moonscale API",
+    "description": "Moonscale API provides endpoints for generating and managing video and audio content for live avatars.",
+    "license": {
+      "name": "MIT"
+    },
+    "version": "1.0.1"
+  },
+  "servers": [
+    {
+      "url": "http://sandbox.mintlify.com"
+    }
+  ],
+  "security": [
+    {
+      "ApiKeyAuth": []
+    }
+  ],
+  "paths": {
+    "/api/v1/conversations/{conversationShortCode}": {
+      "get": {
+        "tags": [
+          "liveAvatar"
+        ],
+        "summary": "Gets a single conversation transcription and summary",
+        "parameters": [
+          {
+            "name": "conversationShortCode",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The conversation short code for the conversation transcription and summary"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiLiveAvatarConversationsResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Invalid get conversation transcription and summary request"
+          }
+        }
+      }
+    },
+    "/api/v1/rooms": {
+      "post": {
+        "tags": [
+          "liveAvatar"
+        ],
+        "summary": "Create a new meeting room via API and store conversation data",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiLiveAvatarCreateRoomRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Meeting room set up successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiLiveAvatarCreateRoomResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Invalid meeting room setup"
+          }
+        }
+      }
+    },
+    "/api/studio-avatar/generated-video/{correlationId}": {
+      "get": {
+        "tags": [
+          "videoGeneration"
+        ],
+        "summary": "Get generated video (same as webhook payload) by correlation ID",
+        "parameters": [
+          {
+            "name": "correlationId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The correlation ID of the video generation request"
+          }
+        ],
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Generated Video retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetGeneratedVideoByCorrelationIdResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Video not found"
+          }
+        }
+      }
+    },
+    "/api/studio-avatar/generate-video": {
+      "post": {
+        "tags": [
+          "videoGeneration"
+        ],
+        "summary": "Generate a new video",
+        "description": "Generate a video using a studio avatar (requires API key authentication)",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VideoGenerationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Video generation initiated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VideoGenerationResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request parameters"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-api-key"
+      }
+    },
+    "schemas": {
+      "ApiLiveAvatarConversationsResponse": {
+        "type": "object",
+        "properties": {
+          "transcript": {
+            "type": "Transcript[]",
+            "items": {
+              "type": "object",
+              "properties": {
+                "role": {
+                  "type": "string",
+                  "description": "User or Assistant"
+                },
+                "content": {
+                  "type": "string",
+                  "description": "The text of the message"
+                },
+                "timestamp": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "The timestamp of the transcription"
+                },
+                "type": {
+                  "type": "string",
+                  "description": "The type of the transcription"
+                }
+              }
+            }
+          },
+          "summary": {
+            "type": "object",
+            "properties": {
+              "text": {
+                "type": "string",
+                "description": "The text of the summary"
+              }
+            }
+          }
+        }
+      },
+      "ApiLiveAvatarCreateRoomRequest": {
+        "type": "object",
+        "required": [
+          "name",
+          "liveAvatarShortCode"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of the meeting room"
+          },
+          "liveAvatarShortCode": {
+            "type": "string",
+            "description": "The shortCode of the LiveAvatar that should be used for the meeting"
+          },
+          "privacy": {
+            "type": "string",
+            "enum": [
+              "public",
+              "private"
+            ],
+            "description": "The privacy setting of the meeting room"
+          },
+          "properties": {
+            "type": "object",
+            "description": "The properties of the meeting room, can be found on Daily API docs"
+          }
+        }
+      },
+      "ApiLiveAvatarCreateRoomResponse": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "The URL for the meeting room with token attached to it for entry by the client."
+          },
+          "conversationShortCode": {
+            "type": "string",
+            "description": "The conversation short code for the meeting room used to retrieve the transcripts."
+          }
+        }
+      },
+      "GetGeneratedVideoByCorrelationIdResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the generated video"
+          },
+          "script": {
+            "type": "string",
+            "description": "The script content used for the video"
+          },
+          "voiceId": {
+            "type": "string",
+            "description": "Identifier for the voice used in the video"
+          },
+          "avatarId": {
+            "type": "string",
+            "description": "Identifier for the avatar used in the video"
+          },
+          "status": {
+            "type": "string",
+            "description": "Current status of the video generation",
+            "enum": [
+              "PENDING",
+              "PROCESSING",
+              "COMPLETED",
+              "FAILED"
+            ]
+          },
+          "videoUrl": {
+            "type": "string",
+            "description": "URL where the generated video can be accessed"
+          },
+          "correlationId": {
+            "type": "string",
+            "description": "Identifier for correlating related events or requests"
+          }
+        }
+      },
+      "VideoGenerationRequest": {
+        "type": "object",
+        "required": [
+          "avatarId",
+          "script",
+          "voiceId",
+          "correlationId"
+        ],
+        "properties": {
+          "avatarId": {
+            "type": "string",
+            "description": "Avatar identifier to use in the video"
+          },
+          "script": {
+            "type": "string",
+            "description": "Text content to be spoken in the video"
+          },
+          "voiceId": {
+            "type": "string",
+            "description": "Voice identifier for speech synthesis"
+          },
+          "correlationId": {
+            "type": "string",
+            "description": "External reference identifier provided by the user"
+          },
+          "webhookUrl": {
+            "type": "string",
+            "description": "Optional callback URL for completion notification"
+          },
+          "metadata": {
+            "type": "object",
+            "description": "Custom metadata for the video"
+          }
+        }
+      },
+      "VideoGenerationResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Internal unique identifier"
+          },
+          "correlationId": {
+            "type": "string",
+            "description": "External reference identifier provided by the user"
+          },
+          "status": {
+            "type": "string",
+            "description": "The status of the video generation",
+            "enum": [
+              "PENDING",
+              "PROCESSING",
+              "COMPLETED",
+              "FAILED"
+            ]
+          }
+        }
+      }
+    }
+  }
+}
