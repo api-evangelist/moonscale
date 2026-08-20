@@ -75,6 +75,13 @@ apis:
   - Conversational AI
   - Video Generation
   - Avatars
+  - Webhook
+  tags_raw:
+  - Artificial Intelligence
+  - Sales
+  - Conversational AI
+  - Video Generation
+  - Avatars
   - Webhooks
   properties:
   - type: OpenAPI
