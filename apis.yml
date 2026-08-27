@@ -57,37 +57,16 @@ tags:
 - Speech
 - Germany
 apis:
-- name: Moonscale API
-  description: >-
-    The Moonscale API covers two surfaces. The live-avatar surface creates single-participant
-    meeting rooms hosted by a real-time AI sales avatar and returns the conversation transcript
-    plus an AI-generated summary afterwards, keyed either by a single conversation handle or by a
-    time window of at most 24 hours. The studio-avatar surface renders videos asynchronously from
-    a script, a voice and an avatar, returning a caller-supplied correlation id that is then used
-    to poll for the result or to match an optional completion webhook. All requests authenticate
-    with an x-api-key header.
+- aid: moonscale:moonscale-liveavatar-api
+  name: Moonscale Live Avatar API
+  description: The liveAvatar API from Moonscale — 2 operation(s) for liveavatar.
   humanURL: https://vidlab7-d7584a5d.mintlify.app/api-reference/introduction
   baseURL: https://api-prd.moonscale.com
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/moonscale.png
   tags:
-  - Artificial Intelligence
-  - Sales
-  - Conversational AI
-  - Video Generation
-  - Avatars
-  - Webhook
-  tags_raw:
-  - Artificial Intelligence
-  - Sales
-  - Conversational AI
-  - Video Generation
-  - Avatars
-  - Webhooks
+  - liveAvatar
   properties:
   - type: OpenAPI
-    url: openapi/moonscale-openapi-original.json
-  - type: Overlay
-    url: overlays/moonscale-api-overlay.yaml
+    url: openapi/moonscale-liveavatar-api-openapi.yml
   - type: Documentation
     url: https://vidlab7-d7584a5d.mintlify.app/api-reference/introduction
   - type: APIReference
@@ -108,14 +87,36 @@ apis:
     url: asyncapi/moonscale-webhooks.yml
   - type: RateLimits
     url: rate-limits/moonscale-rate-limits.yml
-  x-base-url-note: >-
-    The published OpenAPI's servers[] block is http://sandbox.mintlify.com — the Mintlify
-    documentation-template default, on a host Moonscale does not own. The real base URL is
-    https://api-prd.moonscale.com, named throughout Moonscale's own reference and verified
-    live on 2026-08-14 (HTTP 401 with a Moonscale error envelope on /health). The pre-rename
-    host https://api-prd.vidlab7.com is also still live and is the host the third-party
-    Activepieces connector still targets. The harvested spec is left verbatim; the correction
-    is carried in overlays/moonscale-api-overlay.yaml.
+- aid: moonscale:moonscale-videogeneration-api
+  name: Moonscale Video Generation API
+  description: The videoGeneration API from Moonscale — 2 operation(s) for videogeneration.
+  humanURL: https://vidlab7-d7584a5d.mintlify.app/api-reference/introduction
+  baseURL: https://api-prd.moonscale.com
+  tags:
+  - videoGeneration
+  properties:
+  - type: OpenAPI
+    url: openapi/moonscale-videogeneration-api-openapi.yml
+  - type: Documentation
+    url: https://vidlab7-d7584a5d.mintlify.app/api-reference/introduction
+  - type: APIReference
+    url: https://vidlab7-d7584a5d.mintlify.app/api-reference/endpoint/liveAvatarsCreateRoom
+  - type: GettingStarted
+    url: https://vidlab7-d7584a5d.mintlify.app/api-reference/endpoint/createApiKey
+  - type: Authentication
+    url: authentication/moonscale-authentication.yml
+  - type: ErrorCatalog
+    url: errors/moonscale-problem-types.yml
+  - type: DataModel
+    url: data-model/moonscale-data-model.yml
+  - type: Examples
+    url: examples/moonscale-examples.yml
+  - type: Conventions
+    url: conventions/moonscale-conventions.yml
+  - type: Webhooks
+    url: asyncapi/moonscale-webhooks.yml
+  - type: RateLimits
+    url: rate-limits/moonscale-rate-limits.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
