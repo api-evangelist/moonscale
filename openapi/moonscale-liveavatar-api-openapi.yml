@@ -1,0 +1,119 @@
+openapi: 3.2.0
+info:
+  title: Moonscale Live Avatar API
+  description: Moonscale API provides endpoints for generating and managing video and audio content for live avatars.
+  license:
+    name: MIT
+  version: 1.0.1
+servers:
+- url: http://sandbox.mintlify.com
+security:
+- ApiKeyAuth: []
+tags:
+- name: liveAvatar
+paths:
+  /api/v1/conversations/{conversationShortCode}:
+    get:
+      tags:
+      - liveAvatar
+      summary: Gets a single conversation transcription and summary
+      parameters:
+      - name: conversationShortCode
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The conversation short code for the conversation transcription and summary
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiLiveAvatarConversationsResponse'
+        '404':
+          description: Invalid get conversation transcription and summary request
+  /api/v1/rooms:
+    post:
+      tags:
+      - liveAvatar
+      summary: Create a new meeting room via API and store conversation data
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiLiveAvatarCreateRoomRequest'
+      responses:
+        '201':
+          description: Meeting room set up successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiLiveAvatarCreateRoomResponse'
+        '404':
+          description: Invalid meeting room setup
+components:
+  schemas:
+    ApiLiveAvatarConversationsResponse:
+      type: object
+      properties:
+        transcript:
+          type: Transcript[]
+          items:
+            type: object
+            properties:
+              role:
+                type: string
+                description: User or Assistant
+              content:
+                type: string
+                description: The text of the message
+              timestamp:
+                type: string
+                format: date-time
+                description: The timestamp of the transcription
+              type:
+                type: string
+                description: The type of the transcription
+        summary:
+          type: object
+          properties:
+            text:
+              type: string
+              description: The text of the summary
+    ApiLiveAvatarCreateRoomResponse:
+      type: object
+      properties:
+        url:
+          type: string
+          description: The URL for the meeting room with token attached to it for entry by the client.
+        conversationShortCode:
+          type: string
+          description: The conversation short code for the meeting room used to retrieve the transcripts.
+    ApiLiveAvatarCreateRoomRequest:
+      type: object
+      required:
+      - name
+      - liveAvatarShortCode
+      properties:
+        name:
+          type: string
+          description: Name of the meeting room
+        liveAvatarShortCode:
+          type: string
+          description: The shortCode of the LiveAvatar that should be used for the meeting
+        privacy:
+          type: string
+          enum:
+          - public
+          - private
+          description: The privacy setting of the meeting room
+        properties:
+          type: object
+          description: The properties of the meeting room, can be found on Daily API docs
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key

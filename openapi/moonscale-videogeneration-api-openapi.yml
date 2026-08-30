@@ -1,0 +1,139 @@
+openapi: 3.2.0
+info:
+  title: Moonscale Video Generation API
+  description: Moonscale API provides endpoints for generating and managing video and audio content for live avatars.
+  license:
+    name: MIT
+  version: 1.0.1
+servers:
+- url: http://sandbox.mintlify.com
+security:
+- ApiKeyAuth: []
+tags:
+- name: videoGeneration
+paths:
+  /api/studio-avatar/generated-video/{correlationId}:
+    get:
+      tags:
+      - videoGeneration
+      summary: Get generated video (same as webhook payload) by correlation ID
+      parameters:
+      - name: correlationId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The correlation ID of the video generation request
+      security:
+      - ApiKeyAuth: []
+      responses:
+        '200':
+          description: Generated Video retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetGeneratedVideoByCorrelationIdResponse'
+        '404':
+          description: Video not found
+  /api/studio-avatar/generate-video:
+    post:
+      tags:
+      - videoGeneration
+      summary: Generate a new video
+      description: Generate a video using a studio avatar (requires API key authentication)
+      security:
+      - ApiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VideoGenerationRequest'
+      responses:
+        '201':
+          description: Video generation initiated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoGenerationResponse'
+        '400':
+          description: Invalid request parameters
+components:
+  schemas:
+    GetGeneratedVideoByCorrelationIdResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the generated video
+        script:
+          type: string
+          description: The script content used for the video
+        voiceId:
+          type: string
+          description: Identifier for the voice used in the video
+        avatarId:
+          type: string
+          description: Identifier for the avatar used in the video
+        status:
+          type: string
+          description: Current status of the video generation
+          enum:
+          - PENDING
+          - PROCESSING
+          - COMPLETED
+          - FAILED
+        videoUrl:
+          type: string
+          description: URL where the generated video can be accessed
+        correlationId:
+          type: string
+          description: Identifier for correlating related events or requests
+    VideoGenerationRequest:
+      type: object
+      required:
+      - avatarId
+      - script
+      - voiceId
+      - correlationId
+      properties:
+        avatarId:
+          type: string
+          description: Avatar identifier to use in the video
+        script:
+          type: string
+          description: Text content to be spoken in the video
+        voiceId:
+          type: string
+          description: Voice identifier for speech synthesis
+        correlationId:
+          type: string
+          description: External reference identifier provided by the user
+        webhookUrl:
+          type: string
+          description: Optional callback URL for completion notification
+        metadata:
+          type: object
+          description: Custom metadata for the video
+    VideoGenerationResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Internal unique identifier
+        correlationId:
+          type: string
+          description: External reference identifier provided by the user
+        status:
+          type: string
+          description: The status of the video generation
+          enum:
+          - PENDING
+          - PROCESSING
+          - COMPLETED
+          - FAILED
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
