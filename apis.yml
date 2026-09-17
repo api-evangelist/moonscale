@@ -69,18 +69,16 @@ tags:
 - Speech
 - Germany
 apis:
-- aid: moonscale:moonscale-liveavatar-api
+- aid: moonscale:moonscale-live-avatar-api
   name: Moonscale Live Avatar API
-  description: The liveAvatar API from Moonscale — 2 operation(s) for liveavatar.
+  description: The Live Avatar API from Moonscale — 2 operation(s) for live avatar.
   humanURL: https://vidlab7-d7584a5d.mintlify.app/api-reference/introduction
   baseURL: https://api-prd.moonscale.com
   tags:
   - Live Avatar
-  tags_raw:
-  - liveAvatar
   properties:
   - type: OpenAPI
-    url: openapi/moonscale-liveavatar-api-openapi.yml
+    url: openapi/moonscale-live-avatar-api-openapi.yml
   - type: Documentation
     url: https://vidlab7-d7584a5d.mintlify.app/api-reference/introduction
   - type: APIReference
@@ -101,18 +99,16 @@ apis:
     url: asyncapi/moonscale-webhooks.yml
   - type: RateLimits
     url: rate-limits/moonscale-rate-limits.yml
-- aid: moonscale:moonscale-videogeneration-api
+- aid: moonscale:moonscale-video-generation-api
   name: Moonscale Video Generation API
-  description: The videoGeneration API from Moonscale — 2 operation(s) for videogeneration.
+  description: The Video Generation API from Moonscale — 2 operation(s) for video generation.
   humanURL: https://vidlab7-d7584a5d.mintlify.app/api-reference/introduction
   baseURL: https://api-prd.moonscale.com
   tags:
   - Video Generation
-  tags_raw:
-  - videoGeneration
   properties:
   - type: OpenAPI
-    url: openapi/moonscale-videogeneration-api-openapi.yml
+    url: openapi/moonscale-video-generation-api-openapi.yml
   - type: Documentation
     url: https://vidlab7-d7584a5d.mintlify.app/api-reference/introduction
   - type: APIReference
