@@ -1,0 +1,27 @@
+{
+  "provider": "moonscale",
+  "sources": [
+    "_original/moonscale-openapi-original.json"
+  ],
+  "outputs": [
+    "moonscale-liveavatar-api-openapi.yml",
+    "moonscale-videogeneration-api-openapi.yml"
+  ],
+  "archived": [
+    "deleted 2 superseded output(s) from the previous generation"
+  ],
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "moonscale-openapi-original.json: upgraded openapi 3.0.1 -> OpenAPI 3.2.0",
+    "moonscale-openapi-original.json: declared missing tag: liveAvatar",
+    "moonscale-openapi-original.json: declared missing tag: videoGeneration",
+    "superseded outputs removed: moonscale-live-avatar-api-openapi.yml, moonscale-video-generation-api-openapi.yml",
+    "apis.yml register: written (+2 apis, 2 total)"
+  ],
+  "skipped": [
+    "moonscale-live-avatar-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "moonscale-video-generation-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
+}
