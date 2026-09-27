@@ -64,6 +64,32 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    VideoGenerationRequest:
+      type: object
+      required:
+      - avatarId
+      - script
+      - voiceId
+      - correlationId
+      properties:
+        avatarId:
+          type: string
+          description: Avatar identifier to use in the video
+        script:
+          type: string
+          description: Text content to be spoken in the video
+        voiceId:
+          type: string
+          description: Voice identifier for speech synthesis
+        correlationId:
+          type: string
+          description: External reference identifier provided by the user
+        webhookUrl:
+          type: string
+          description: Optional callback URL for completion notification
+        metadata:
+          type: object
+          description: Custom metadata for the video
     VideoGenerationResponse:
       type: object
       properties:
@@ -110,32 +136,6 @@ components:
         correlationId:
           type: string
           description: Identifier for correlating related events or requests
-    VideoGenerationRequest:
-      type: object
-      required:
-      - avatarId
-      - script
-      - voiceId
-      - correlationId
-      properties:
-        avatarId:
-          type: string
-          description: Avatar identifier to use in the video
-        script:
-          type: string
-          description: Text content to be spoken in the video
-        voiceId:
-          type: string
-          description: Voice identifier for speech synthesis
-        correlationId:
-          type: string
-          description: External reference identifier provided by the user
-        webhookUrl:
-          type: string
-          description: Optional callback URL for completion notification
-        metadata:
-          type: object
-          description: Custom metadata for the video
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
