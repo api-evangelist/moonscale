@@ -90,23 +90,6 @@ components:
         metadata:
           type: object
           description: Custom metadata for the video
-    VideoGenerationResponse:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Internal unique identifier
-        correlationId:
-          type: string
-          description: External reference identifier provided by the user
-        status:
-          type: string
-          description: The status of the video generation
-          enum:
-          - PENDING
-          - PROCESSING
-          - COMPLETED
-          - FAILED
     GetGeneratedVideoByCorrelationIdResponse:
       type: object
       properties:
@@ -136,6 +119,23 @@ components:
         correlationId:
           type: string
           description: Identifier for correlating related events or requests
+    VideoGenerationResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Internal unique identifier
+        correlationId:
+          type: string
+          description: External reference identifier provided by the user
+        status:
+          type: string
+          description: The status of the video generation
+          enum:
+          - PENDING
+          - PROCESSING
+          - COMPLETED
+          - FAILED
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

@@ -59,15 +59,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    ApiLiveAvatarCreateRoomResponse:
-      type: object
-      properties:
-        url:
-          type: string
-          description: The URL for the meeting room with token attached to it for entry by the client.
-        conversationShortCode:
-          type: string
-          description: The conversation short code for the meeting room used to retrieve the transcripts.
     ApiLiveAvatarConversationsResponse:
       type: object
       properties:
@@ -116,6 +107,15 @@ components:
         properties:
           type: object
           description: The properties of the meeting room, can be found on Daily API docs
+    ApiLiveAvatarCreateRoomResponse:
+      type: object
+      properties:
+        url:
+          type: string
+          description: The URL for the meeting room with token attached to it for entry by the client.
+        conversationShortCode:
+          type: string
+          description: The conversation short code for the meeting room used to retrieve the transcripts.
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
