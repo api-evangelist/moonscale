@@ -59,6 +59,27 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    ApiLiveAvatarCreateRoomRequest:
+      type: object
+      required:
+      - name
+      - liveAvatarShortCode
+      properties:
+        name:
+          type: string
+          description: Name of the meeting room
+        liveAvatarShortCode:
+          type: string
+          description: The shortCode of the LiveAvatar that should be used for the meeting
+        privacy:
+          type: string
+          enum:
+          - public
+          - private
+          description: The privacy setting of the meeting room
+        properties:
+          type: object
+          description: The properties of the meeting room, can be found on Daily API docs
     ApiLiveAvatarConversationsResponse:
       type: object
       properties:
@@ -86,27 +107,6 @@ components:
             text:
               type: string
               description: The text of the summary
-    ApiLiveAvatarCreateRoomRequest:
-      type: object
-      required:
-      - name
-      - liveAvatarShortCode
-      properties:
-        name:
-          type: string
-          description: Name of the meeting room
-        liveAvatarShortCode:
-          type: string
-          description: The shortCode of the LiveAvatar that should be used for the meeting
-        privacy:
-          type: string
-          enum:
-          - public
-          - private
-          description: The privacy setting of the meeting room
-        properties:
-          type: object
-          description: The properties of the meeting room, can be found on Daily API docs
     ApiLiveAvatarCreateRoomResponse:
       type: object
       properties:
