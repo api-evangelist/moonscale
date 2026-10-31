@@ -64,6 +64,122 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Moonscale is a company surfaced as a portfolio company of eqt-ventures and added to the API Evangelist network as a stub for enrichment. Sector: artificial-intelligence. This profile is a lead awaiting the enrichment pipeline.
+Moonscale (formerly VidLab7) is a Munich-based AI sales advisor platform whose "Digital Sales Human" avatars automate top-of-funnel sales conversations — pitching products, qualifying inbound buyers, running interactive demos, handling objections, booking meetings and following up around the clock across websites, landing pages, emails and apps, with support for 130+ languages and CRM connections to Salesforce, HubSpot, Pipedrive, Slack and Clay. Moonscale does publish a real, machine-readable API: an OpenAPI 3.0.1 document titled "Moonscale API" served from its Mintlify documentation site, covering four operations across two surfaces — live-avatar meeting rooms with conversation transcripts and summaries (/api/v1/), and asynchronous studio-avatar video generation with a caller-registered completion webhook (/api/studio-avatar/). Requests authenticate with an x-api-key header against https://api-prd.moonscale.com; keys are issued from Moonscale Studio, but API access is feature-flagged per account and must be requested from support. There is no first-party SDK, MCP server, agent card, status page, changelog, published rate limit or published price. Backed by EQT Ventures.
 
-Backed by: eqt-ventures — https://www.moonscale.com/
+**Areas:** Company · Artificial Intelligence · Sales · Sales Automation · Lead Generation · AI Agents · Conversational AI · CRM · Video Generation · Avatars · Speech · Germany
+
+## Moonscale on APIs.io
+
+Everything profiled for Moonscale is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/moonscale/](https://apis.io/providers/moonscale/)** — or go straight to one of the APIs or properties below.
+
+### APIs (2)
+
+- [Moonscale Live Avatar API](https://apis.io/apis/moonscale/moonscale-live-avatar-api/) — The Live Avatar API from Moonscale — 2 operation(s) for live avatar.
+- [Moonscale Video Generation API](https://apis.io/apis/moonscale/moonscale-video-generation-api/) — The Video Generation API from Moonscale — 2 operation(s) for video generation.
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### AsyncAPI (1)
+
+Event-driven and webhook contracts.
+
+- [Moonscale Webhooks](https://apis.io/asyncapis/moonscale/moonscale-webhooks/)
+
+#### Agentic access (1)
+
+Which operations an agent can call, which act, and which need a human in the loop.
+
+- [Moonscale Agentic Access](https://apis.io/agentic-access/moonscale/moonscale-agentic-access/)
+
+#### Overlays (1)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Moonscale Api Overlay](https://apis.io/overlays/moonscale/moonscale-api-overlay/)
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Moonscale Authentication](https://apis.io/security/moonscale/moonscale-authentication/)
+- [Moonscale Domain Security](https://apis.io/security/moonscale/moonscale-domain-security/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Moonscale Plans Pricing](https://apis.io/plans/moonscale/moonscale-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Moonscale Rate Limits](https://apis.io/rate-limits/moonscale/moonscale-rate-limits/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://www.moonscale.com/)
+- [Documentation](https://vidlab7-d7584a5d.mintlify.app/api-reference/introduction)
+- [Getting started](https://vidlab7-d7584a5d.mintlify.app/api-reference/endpoint/createApiKey)
+- [API reference](https://vidlab7-d7584a5d.mintlify.app/api-reference/endpoint/liveAvatarsCreateRoom)
+- [Support](https://www.moonscale.com/contact)
+- [Blog](https://www.moonscale.com/blog)
+- [Terms of service](https://www.moonscale.com/legal/terms-and-conditions)
+- [Privacy policy](https://www.moonscale.com/legal/privacy)
+
+## API Evangelist rating
+
+**Kin Score 37.3** — thin · rubric 0.24.0 · scored 2026-10-17
+
+| Facet | Score |
+|---|---|
+| Discoverability | 73.2 |
+| Contract quality | 51.8 |
+| Contract governance | 4.5 |
+| Operational transparency | 7.9 |
+| Developer ergonomics | 49.4 |
+| Access clarity | 27.6 |
+
+**Agent readiness 23.7** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | derived (partial credit) |
+| OpenAPI Examples | documented (partial credit) |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | derived (partial credit) |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+
+**Regulatory alignment 22.7** — AI & Biometrics
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/moonscale/](https://apis.io/providers/moonscale/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Moonscale: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/moonscale/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
